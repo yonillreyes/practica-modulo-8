@@ -1,0 +1,141 @@
+lo primero es agregar el repositorio
+sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+después instalar docker
+sudo dnf install docker-ce --allowerasing -y 
+
+habilitamos el servicio
+sudo systemctl enable --now docker 
+
+vemos el estado 
+sudo systemctl status docker
+
+descargamos la imagen de  ngnix desde la dockerhub
+sudo docker pull nginx
+
+hacer el paso 3 y 4
+
+con sudo docker images vemos si se instalo correctamente
+
+sudo docker run -d nginx para levantar y sudo docker ps -a para ver 
+
+para mapiar el volumen ponemos sudo docker run -d -p 8888:80 nginx
+
+revisamos en Firefox
+creamos la carpeta sudo mkdir -p /home/website
+
+entramos a website cd /home/website/
+
+editamos el index.html sudo nando /home/website/index.html
+html>
+<body>
+         <h1>yonill reyes veloz</h1>
+         <h2> 2024-1574</h2>
+</body>
+</html>
+
+lo vinclamos al puerto 80
+sudo docker run -d -p 8888:80 -v /home/website:/usr/share/nginx/html nginx
+
+
+sudo docker ps -a para ver los dockers 
+
+y sudo docker stop el id para parar la que teníamos 
+
+abrimos el Firefox para confirmar 
+
+
+---------------------------------------------------------------------------
+
+
+crear el volumen
+sudo docker volume create portainer_data
+
+descargar la imagen
+sudo docker pull portainer/portainer-ce
+
+revisamos con sudo docker images
+
+levantamos la interfaz con
+sudo docker run -d -p 9000:9000 --name container --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+
+
+entramos a Firefox & y entramos al servidor
+
+
+creamos el usuario y nos logiamos 
+
+seleccionamos docker standalone
+
+copiamos lo que nos da y l ponemos en la terminar (cn sudo)
+
+después ponermos un nombre y la ip de nuestro host 
+
+entramos a los contenedores y apagamos la practica pasada.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+instalamos docker compose
+sudo dnf install -y  docker-compose-plugin
+
+habilitamos todo
+sudo systemctl enable --now docker
+
+lo añadimos al grupo
+sudo usermod -aG docker yonill
+
+creamos una carpeta
+mkdir wordpress-compose && cd wordpress-compose
+
+la editamos 
+nano docker-compose.yml
+
+
+ponemos esto
+version: '3.3'
+
+services:
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    volumes:
+      - wordpress_files:/var/www/html
+    ports:
+      - "9002:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: 20241574
+      WORDPRESS_DB_NAME: wordpress
+
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 20241574
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: 20241574
+
+volumes:
+  wordpress_files:
+  db_data:
+
+(off cualquier puerto que este en el 80)
+
+
+docker compose up -d
+
+docker compose ps -a
+
+
+y entramos para ver
+http://localhost:9002
+
+
