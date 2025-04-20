@@ -1,32 +1,130 @@
-lo primero es agregar el repositorio
+
+Practica 1: Instalacion y configuracion de Docker (1Pts)
+
+Instalar Docker en mi servidor
+Descargar una Imagen de NGINX web server (desde la Dockerhub)
+Crear un contenedor a partir la la imagen de NGINX en a que el puerto 8888 del host sera redireccionado al puerto 80 del contenedor de GNINX, de igual forma montar un volumen persistente /home/website --> /usr/share/nginx/html/
+Crear una pagina HTML sencilla la cual tenga su nombre y matricula y nombrarla como index.html, una vez creada copiarla al la ruta del volumen persistente para que la misma puedea ser visualizada por el contenedor (/home/website)
+Ingrese al navegador (127.0.0.1:8888) y muestre la pagina que ha creado
+
+
+
+Practica 2: Instalacion de Portainer (1Pts)
+
+Descargar desde la Dockerhub una imagen de portainer
+Crear a partir de la imagen, un contenedor y mapear todos los puertos internos del contenedor a los puertos externos del host
+Ingresar a la interfaz de administracion de portainer (127.0.0.1:9000) y vincularla con el Docker Engine que se encuentra corriendo en el host local
+Una vez se encuentre conectada, detener el contenedor de GNINX (de la practica previa) a travez de container, muestre el resultado en el navegador Web
+
+
+
+Practica #3: IDespliegue de contenedor de Wordpress utilizando Docker-Compose (2pts)
+
+Realize el proceso de instalacion de Docker-compose
+Creen un archivo llamado docker-compose.yml donde se especifiquen las Variables de entorno que usaran los contenedores asi como un contenedor par ala BD y uno par ael aplicativo de wordpress
+Realize el despliegue de los contenedores utilizando docker compose
+una vez finalizado el despliegue ingrese mediante el navegador y configure wordpress para su correcto uso
+
+
+
+
+
+
+
+
+
+practica 1:
+
+
+lo primero es agregar el repositorio:
+
 sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
-después instalar docker
+
+
+después instalar docker:
+
 sudo dnf install docker-ce --allowerasing -y 
 
-habilitamos el servicio
+
+
+habilitamos el servicio:
+
 sudo systemctl enable --now docker 
 
-vemos el estado 
+
+
+vemos el estado:
+
 sudo systemctl status docker
 
-descargamos la imagen de  ngnix desde la dockerhub
+
+
+
+descargamos la imagen de  ngnix desde la dockerhub:
+
 sudo docker pull nginx
 
-hacer el paso 3 y 4
 
-con sudo docker images vemos si se instalo correctamente
+para ver la imagen descargada ponemos:
 
-sudo docker run -d nginx para levantar y sudo docker ps -a para ver 
+sudo docker images
 
-para mapiar el volumen ponemos sudo docker run -d -p 8888:80 nginx
 
-revisamos en Firefox
-creamos la carpeta sudo mkdir -p /home/website
 
-entramos a website cd /home/website/
 
-editamos el index.html sudo nando /home/website/index.html
+
+para levantar el contenedor ponemos:
+
+sudo docker run -d nginx 
+
+
+
+y  para ver el contenedor ponemos:
+
+sudo docker ps -a
+
+
+
+
+para mapiar el volumen ponemos:
+
+sudo docker run -d -p 8888:80 nginx
+
+
+
+(Entramos a firefox y revisamos que nos deje entrar a nginx, despues salimos para seguir con la configuracion.)
+
+
+
+ despues creamos la carpeta:
+
+sudo mkdir -p /home/website
+
+
+
+
+
+entramos a website:
+
+cd /home/website/
+
+
+
+
+
+
+
+
+editamos el index.html con: 
+
+sudo nano /home/website/index.html
+
+
+
+
+adrentro ponemos esto:
+
 html>
 <body>
          <h1>yonill reyes veloz</h1>
@@ -34,18 +132,37 @@ html>
 </body>
 </html>
 
-lo vinclamos al puerto 80
+
+
+
+
+
+
+una  vez guardamos ese contenido ahoralo vinclamos al puerto 80:
+
 sudo docker run -d -p 8888:80 -v /home/website:/usr/share/nginx/html nginx
 
 
-sudo docker ps -a para ver los dockers 
 
-y sudo docker stop el id para parar la que teníamos 
 
-abrimos el Firefox para confirmar 
+(si no sale un error por que ya se esta usando el puerto podemos detener el docker que esta usando el puerto)
+
+
+
+para ver el docker que esta usando el puerto ponemos:
+
+sudo docker ps -a  
+
+y para pararlo para:
+
+sudo docker stop <id del docker>
+
+abrimos el Firefox para confirmar <recomendable recargar la pagina>
 
 
 ---------------------------------------------------------------------------
+
+practica 2:
 
 
 crear el volumen
@@ -69,12 +186,13 @@ seleccionamos docker standalone
 
 copiamos lo que nos da y l ponemos en la terminar (cn sudo)
 
-después ponermos un nombre y la ip de nuestro host 
+después si le damos un poco mas para abajo nos va a decir para ponerle un nombre ponermos un nombre y la ip de nuestro host acompa;ado del puerto que seria el 9001. reiniciamos todo y entramos.
 
 entramos a los contenedores y apagamos la practica pasada.
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
+practica 3:
 
 instalamos docker compose
 sudo dnf install -y  docker-compose-plugin
@@ -130,12 +248,32 @@ volumes:
 (off cualquier puerto que este en el 80)
 
 
-docker compose up -d
 
-docker compose ps -a
+para completar la instalacion:
+
+sudo docker compose up -d
+sudo docker compose ps -a
 
 
 y entramos para ver
 http://localhost:9002
+
+
+
+
+configuracion por interfaz grafica una vez adentro:
+
+paso1: ponemos el idioma en español y le damos a siguiente
+
+paso2: le ponemos un titular al sitio cualquiere y el titulo tambien cualquiera .
+
+paso3: en nombre de usuario ponemos admin y de contraseña cualquiera , mas para abajo nos saldra para poner un correo yo pondre el correo dle ITLA.
+
+paso 4: aceptamos las condiciones y le damos a siguiente, esto completara la descarga, de daremso a acceder y nos aparecera para registrarnos en wordprees nos logiamos y entramos.
+
+paso 5: ya una vez ponemso nuestrar credenciales para entrar se nos abrira toda la pagina de wordpress.
+
+paso 6: podemos hacer muchas cosas como actualizar, configurar, entre otros.
+
 
 
